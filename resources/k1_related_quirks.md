@@ -133,9 +133,36 @@ $ insmod mcs_km/mcs_km.ko
 
 - 由于需要为client OS预留内存，同时kernel module也会识别设备树中的信息进行初始化，需要为qemu准备适配mcs的设备树文件。k1的设备树patch放在MCS repo下tools
 
+### 测试步骤
 
+分别连接RCPU，ACPU UART
+![](imgs/Pasted%20image%2020251218173914.png)
+
+进入shell之后
+1. 加载kernel module
+```
+$ modprobe mcs_km  
+```
+2. 启动 micad 服务
+```
+$ micad
+```
+3. 通过 mica 创建 rtos 实例
+```
+$ mica create /lib/firmware/mcs/k1-zephyr.conf
+```
+4. 启动/停止 rtos
+```
+$ mica start k1-zephy
+$ mica stop k1-zephyr
+```
+
+预期行为
+ACPU uart输出linux kernel log
+RCPU uart输出zephyr的log
+![](imgs/Pasted%20image%2020251218175404.png)
 ### Links & Docs
 - [k1 CPU System Doc](https://developer.spacemit.com/documentation?token=ZZrhw4xvHiIVa7kTHlycxrmXn6d)(所有驱动相关的控制寄存器/MMIO寄存器都可以在这里找到)
-- [k1 RCPU System Doc](https://doc.nucleisys.com/nuclei_spec/isa/eclic.html#)(实时核相关手册)
+- [k1 RCPU System Do](https://doc.nucleisys.com/nuclei_spec/isa/eclic.html#)(实时核相关手册)
 - [bananapi Bpi-f3 Doc](https://docs.banana-pi.org/zh/BPI-F3/BananaPi_BPI-F3)(可以看到gpio26pin引脚图，方便接线)
 
